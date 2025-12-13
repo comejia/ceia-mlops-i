@@ -13,7 +13,7 @@ Para ejecutar Docker Compose:
 ```Bash
 docker compose up
 ```
-Una vez que se inicializa, podrás acceder a Airflow en `http://localhost:8080` e ingresar con usuario/contraseña: `airflow/aiflow`.
+Una vez que se inicializa, podrás acceder a Airflow en `http://localhost:8000` e ingresar con usuario/contraseña: `airflow/aiflow`.
 
 Para detener el servicio:
 ```Bash

@@ -2,14 +2,15 @@ import datetime
 from airflow.decorators import dag, task
 
 default_args = {
-    'depends_on_past': False,
+    'depends_on_past': False, # No depende de ejecuciones pasadas
     'schedule_interval': None,
     'retries': 1,
     'retry_delay': datetime.timedelta(minutes=5),
     'dagrun_timeout': datetime.timedelta(minutes=15)
 }
 
-
+# Con @dag defino la configuración del DAG, y dentro van las tareas.
+# Al final se encuentra el orden de ejecución de las tareas.
 @dag(
     dag_id="etl_with_taskflow",
     description="Proceso ETL de ejemplo usando TaskFlow",
@@ -19,10 +20,10 @@ default_args = {
 )
 def process_etl_taskflow():
 
-    @task.virtualenv(
+    @task.virtualenv( # Usa virtualenv para aislar dependencias que sen instalarán solo para esta tarea
         task_id="obtain_original_data",
         requirements=["ucimlrepo>=0.0"],
-        system_site_packages=False
+        system_site_packages=False # Evita conflictos con las librerías instaladas en Airflow
     )
     def get_data():
         """
@@ -37,7 +38,7 @@ def process_etl_taskflow():
         print("🧹 Normalizando columna 'num'...")
         dataset.loc[dataset["num"] > 0, "num"] = 1
 
-        path = "./data.csv"
+        path = "./data.csv" # Deberia guardarse en una BD / bucket de S3 para poder usarlo en otras tareas
         dataset.to_csv(path, index=False)
         print(f"💾 Dataset guardado en: {path}")
 
